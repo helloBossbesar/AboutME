@@ -1,0 +1,49 @@
+:root {
+  /* Warna Token Baru */
+  --color-canvas: #0F0F0F;             /* latar halaman (turunan, lebih gelap dari Charcoal) */
+  --color-panel: #2A2A2A;              /* Charcoal Grey: kartu, panel */
+  --color-text: #C0C0C0;               /* Moonlit Silver: teks utama */
+  --color-text-strong: #F2F2F2;        /* judul besar dan nama */
+  --color-text-muted: rgba(192, 192, 192, 0.68);
+  --color-hairline: rgba(192, 192, 192, 0.16);
+  --color-hairline-soft: rgba(192, 192, 192, 0.08);
+  --color-glass: rgba(192, 192, 192, 0.05);
+  --color-nav: rgba(20, 20, 20, 0.7);
+  --color-signal: #E10600;             /* Signal Red: satu-satunya warna sinyal */
+  --color-on-signal: #FFFFFF;          /* teks di atas isi merah (Silver di atas merah GAGAL kontras) */
+  --color-code: #35D07F;               /* hijau terminal, HANYA untuk strip kode kanan */
+
+  /* Font */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-display: 'Lora', Georgia, 'Times New Roman', serif; /* hanya italic, hanya >= 32px */
+
+  /* Skala tipografi */
+  --text-caption: 10px;   --tracking-caption: 0.18em;
+  --text-body-sm: 14px;
+  --text-body: 16px;
+  --text-subheading: 20px;
+  --text-heading-sm: clamp(24px, 3vw, 32px);
+  --text-heading: clamp(32px, 5vw, 48px);
+  --text-heading-lg: clamp(40px, 6vw, 64px);   --tracking-heading-lg: -0.01em;
+  --text-section-stamp: clamp(32px, 8vw, 74px); --tracking-section-stamp: 0.2em;
+  --text-display: clamp(56px, 10vw, 88px);      --tracking-display: -0.03em;
+  --text-hero-italic: clamp(64px, 9vw, 128px);
+
+  /* Spacing (basis 4px) */
+  --spacing-4: 4px;  --spacing-8: 8px;   --spacing-12: 12px; --spacing-16: 16px;
+  --spacing-20: 20px; --spacing-24: 24px; --spacing-32: 32px; --spacing-40: 40px;
+  --spacing-48: 48px; --spacing-64: 64px; --spacing-80: 80px; --spacing-96: 96px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: clamp(64px, 8vw, 96px); /* Satu sumber jarak antar seksi */
+  --card-padding: clamp(24px, 4vw, 40px);
+  --element-gap: 16px;
+
+  /* Radius */
+  --radius-card: 19.2px;
+  --radius-pill: 1584px;
+  --radius-button: 8px;
+  --radius-control: 6px;
+}

@@ -1,0 +1,1081 @@
+/* ==========================================================================
+   MAIN.CSS — Gaya Dasar, Reset, Komponen, & Responsif
+   Website Profil Pribadi Muhammad Dzaki Al Siraj
+   Gaya Visual: Midnight Terminal (Charcoal, Moonlit Silver, Signal Red)
+   Revisi: Latar 3D Global & Perbaikan Projects
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Reset & Pengaturan Global
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  background-color: var(--color-canvas);
+  color: var(--color-text);
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background: transparent;
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   2. LAYER LATAR BELAKANG GLOBAL (Z-INDEX POSITIF DARI BAWAH KE ATAS)
+   ========================================================================== */
+
+/* Layer 0: Canvas Scene 3D Global Three.js (Fixed di pusat layar) */
+#bg-3d {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  display: block;
+}
+
+/* Fallback SVG untuk lingkungan tanpa WebGL / reduced-motion */
+.bg-3d-fallback {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(225, 6, 0, 0.20) 0%, rgba(15, 15, 15, 0.95) 60%);
+}
+
+.fallback-svg {
+  width: min(70vh, 60vw);
+  height: min(70vh, 60vw);
+  max-width: 480px;
+  max-height: 480px;
+  opacity: 0.45;
+}
+
+/* Layer 1: Overlay Vignette Global (Mencegah objek mengganggu keterbacaan teks) */
+.bg-vignette {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse at center,
+      rgba(15, 15, 15, 0.35) 0%,
+      rgba(15, 15, 15, 0.85) 100%);
+}
+
+/* Layer 2: Tekstur Grain Halus Seluruh Layar (feTurbulence SVG) */
+.bg-grain {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Layer 3: Strip Kode Hijau (Code Rail) di Kanan Viewport */
+#code-rail {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: clamp(64px, 9vw, 140px);
+  pointer-events: none;
+  z-index: 3;
+  mask-image: linear-gradient(to right, transparent 0%, black 60%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
+}
+
+@media (max-width: 599px) {
+  #code-rail {
+    display: none;
+  }
+}
+
+/* Konten Halaman Utama (z-index: 10 di atas seluruh layer latar) */
+main,
+.site-footer {
+  position: relative;
+  z-index: 10;
+  background: transparent;
+}
+
+/* Aksesibilitas: Indikator fokus terlihat jelas */
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+/* Skip link untuk navigasi keyboard */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--spacing-16);
+  background: var(--color-panel);
+  color: var(--color-text-strong);
+  padding: var(--spacing-12) var(--spacing-20);
+  border: 1px solid var(--color-text);
+  border-radius: var(--radius-button);
+  z-index: 9999;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: var(--spacing-16);
+}
+
+/* Wadah tata letak */
+.container {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-24);
+  padding-right: var(--spacing-24);
+}
+
+/* Jarak antar seksi halaman — SATU sumber jarak terstandar */
+.page-section {
+  padding-block: clamp(64px, 8vw, 96px);
+  padding-inline: 0;
+  margin: 0;
+  background: transparent;
+  scroll-margin-top: 88px;
+}
+
+/* Heading bagian tipe stamp (JetBrains Mono, huruf kapital, tracking 0.2em) */
+.section-stamp {
+  font-family: var(--font-mono);
+  font-size: var(--text-section-stamp);
+  letter-spacing: var(--tracking-section-stamp);
+  text-transform: uppercase;
+  color: var(--color-text-strong);
+  line-height: 1.0;
+  margin-bottom: var(--spacing-40);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   3. Navigasi Frosted (z-index: 50)
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  background-color: var(--color-nav);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-hairline);
+  transition: background-color 0.2s ease;
+}
+
+.nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+/* Wordmark identitas */
+.brand-wordmark {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--text-body);
+  color: var(--color-text-strong);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: opacity 0.2s ease;
+}
+
+.brand-wordmark:hover {
+  opacity: 0.85;
+}
+
+/* Daftar tautan navigasi desktop */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-32);
+  list-style: none;
+}
+
+.nav-link {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: var(--spacing-8) 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--color-text-strong);
+}
+
+/* Tanda tautan aktif (Indikator warna sinyal merah) */
+.nav-link.active {
+  color: var(--color-text-strong);
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-signal);
+}
+
+/* Tombol Hubungi di navigasi */
+.btn-nav-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-button);
+  padding: 12px 20px;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  text-decoration: none;
+  line-height: 1;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-nav-contact:hover {
+  background-color: var(--color-panel);
+  border-color: var(--color-text);
+  color: var(--color-text-strong);
+}
+
+/* Tombol hamburger untuk mobile */
+.nav-toggle-btn {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-control);
+  color: var(--color-text);
+  padding: 8px 12px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease;
+}
+
+.nav-toggle-btn:hover {
+  border-color: var(--color-text);
+}
+
+.nav-toggle-icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-text);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* --------------------------------------------------------------------------
+   4. Seksi Hero (Transparan, Teks Rata Kiri ~55%, Latar 3D Tampak Penuh)
+   -------------------------------------------------------------------------- */
+.hero-section {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  padding-top: calc(72px + var(--spacing-32));
+  padding-bottom: var(--spacing-48);
+}
+
+.hero-container {
+  width: 100%;
+}
+
+.hero-left {
+  max-width: 55%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.hero-intro {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-hero-italic);
+  line-height: 1.0;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-8);
+}
+
+/* Kata "saya" berwarna merah (ukuran display >= 24px) */
+.hero-word-saya {
+  color: var(--color-signal);
+}
+
+.hero-name {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--text-heading-lg);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--color-text-strong);
+  margin-bottom: var(--spacing-20);
+  word-break: normal;
+}
+
+.hero-subtext {
+  font-family: var(--font-sans);
+  font-size: var(--text-subheading);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-36);
+  max-width: 580px;
+}
+
+/* Tombol Aksi Hero (Primary Merah + Ghost Silver) */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-16);
+}
+
+.btn-primary-signal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-signal);
+  color: var(--color-on-signal);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--text-body);
+  padding: 16px 36px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.btn-primary-signal:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+}
+
+.btn-ghost-pill {
+  background-color: var(--color-glass);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  padding: 16px 32px;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.btn-ghost-pill:hover {
+  background-color: rgba(192, 192, 192, 0.12);
+  border-color: var(--color-text);
+  color: var(--color-text-strong);
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   5. Seksi ABOUT (Tiket Moonlit Silver & Panel Kaca Bio)
+   -------------------------------------------------------------------------- */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-48);
+  align-items: stretch;
+}
+
+/* Kartu Profile Pass sebagai Tiket Moonlit Silver */
+.profile-pass-ticket {
+  display: flex;
+  background-color: #C0C0C0;
+  color: #2A2A2A;
+  border-radius: var(--radius-card);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(192, 192, 192, 0.3);
+}
+
+/* Notches perforasi atas dan bawah pada garis pemisah tiket */
+.profile-pass-ticket::before,
+.profile-pass-ticket::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-color: var(--color-canvas);
+  border-radius: 50%;
+  z-index: 5;
+  right: 77px;
+  transform: translateX(50%);
+}
+
+.profile-pass-ticket::before {
+  top: -11px;
+}
+
+.profile-pass-ticket::after {
+  bottom: -11px;
+}
+
+/* Tubuh utama tiket */
+.ticket-main {
+  flex: 1;
+  padding: clamp(24px, 3.5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+  border-right: 2px dashed rgba(42, 42, 42, 0.35);
+  position: relative;
+}
+
+.ticket-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(42, 42, 42, 0.2);
+  padding-bottom: var(--spacing-8);
+}
+
+.ticket-stamp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #2A2A2A;
+  font-weight: 700;
+}
+
+.ticket-data-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.ticket-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-12);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+}
+
+.ticket-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #555555;
+  min-width: 60px;
+}
+
+.ticket-arrow {
+  color: #777777;
+  font-size: 12px;
+}
+
+.ticket-val {
+  color: #1A1A1A;
+  font-weight: 500;
+}
+
+.btn-ticket-ig {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2A2A2A;
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+  padding: 10px 22px;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  text-decoration: none;
+  width: fit-content;
+  margin-top: var(--spacing-4);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-ticket-ig:hover {
+  background-color: #0F0F0F;
+  transform: translateY(-1px);
+}
+
+/* Stub kanan tiket (Merah Sinyal dengan Barcode Charcoal) */
+.ticket-stub {
+  width: 88px;
+  background-color: var(--color-signal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-12);
+  padding: var(--spacing-16) var(--spacing-8);
+  position: relative;
+}
+
+.ticket-barcode-vertical {
+  width: 44px;
+  height: 180px;
+  background: repeating-linear-gradient(180deg,
+      #2A2A2A 0px,
+      #2A2A2A 2px,
+      transparent 2px,
+      transparent 5px,
+      #2A2A2A 5px,
+      #2A2A2A 8px,
+      transparent 8px,
+      transparent 10px,
+      #2A2A2A 10px,
+      #2A2A2A 13px,
+      transparent 13px,
+      transparent 15px,
+      #2A2A2A 15px,
+      #2A2A2A 17px,
+      transparent 17px,
+      transparent 21px);
+  border-radius: 2px;
+  opacity: 0.9;
+}
+
+.ticket-stub-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Panel Kaca Bio: Blok teks panjang duduk di atas panel kaca */
+.about-bio-panel {
+  background: var(--color-glass);
+  border: 1px solid var(--color-hairline);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--radius-card);
+  padding: var(--card-padding);
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.bio-placeholder {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   6. Seksi PROJECTS (Perbaikan Garis Rute Statis vs Inner Hover)
+   -------------------------------------------------------------------------- */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-24);
+  margin-top: 52px;
+  align-items: stretch;
+}
+
+/* WRAPPER KARTU: Statis, menahan titik dan garis rute agar TIDAK bergeser saat hover */
+.project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Titik bulat (node) rute penerbangan: tepat di tengah horizontal, 24px di atas kartu */
+.project-card::before {
+  content: "";
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-signal);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Garis rute merah 1px menyambung dari node kartu ini ke node kartu berikutnya */
+.project-card:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  width: calc(100% + var(--spacing-24));
+  height: 1px;
+  background-color: var(--color-signal);
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ELEMEN DALAM KARTU: Menerima efek hover, tilt, dan border */
+.project-card__inner {
+  flex: 1;
+  border-radius: var(--radius-card);
+  padding: var(--card-padding);
+  position: relative;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1), border-color 250ms ease;
+  will-change: transform;
+}
+
+/* Angka besar di ATAS kartu (tidak menimpa teks) */
+.project-card-num {
+  font-family: var(--font-mono);
+  font-size: clamp(40px, 4vw, 56px);
+  font-weight: 400;
+  line-height: 1.0;
+  margin-bottom: auto;
+}
+
+/* Bagian teks di BAWAH kartu */
+.project-card-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.project-card-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-caption);
+  text-transform: uppercase;
+}
+
+.project-card-title {
+  font-family: var(--font-sans);
+  font-size: var(--text-subheading);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Kartu 01: Berisi Merah Sinyal (Teks Putih) */
+.project-card--bloom {
+  background-color: var(--color-signal);
+  color: var(--color-on-signal);
+  border: none;
+}
+
+.project-card--bloom .project-card-num {
+  color: var(--color-on-signal);
+  opacity: 0.6;
+}
+
+.project-card--bloom .project-card-label,
+.project-card--bloom .project-card-title {
+  color: var(--color-on-signal);
+}
+
+/* Kartu 02, 03, 04: Berisi Panel Charcoal + Hairline */
+.project-card--panel {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-text);
+}
+
+.project-card--panel .project-card-num {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.project-card--panel .project-card-label {
+  color: var(--color-text-muted);
+}
+
+.project-card--panel .project-card-title {
+  color: var(--color-text-strong);
+}
+
+/* Efek Hover: HANYA mengangkat elemen dalam kartu, garis rute tetap diam */
+.project-card:hover .project-card__inner {
+  transform: translateY(-4px);
+}
+
+.project-card:hover .project-card--panel {
+  border-color: rgba(192, 192, 192, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   7. Seksi SKILLS
+   -------------------------------------------------------------------------- */
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-12);
+  list-style: none;
+  padding: 0;
+}
+
+.skills-list .pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline);
+  background-color: var(--color-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: 400;
+  transition: border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.skills-list .pill:hover {
+  border-color: var(--color-text);
+  background-color: rgba(192, 192, 192, 0.1);
+  color: var(--color-text-strong);
+}
+
+/* --------------------------------------------------------------------------
+   8. Seksi CONTACT
+   -------------------------------------------------------------------------- */
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.contact-row {
+  border-bottom: 1px solid var(--color-hairline);
+  position: relative;
+}
+
+.contact-link {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  align-items: center;
+  gap: var(--spacing-24);
+  padding: 28px var(--spacing-16);
+  text-decoration: none;
+  color: var(--color-text);
+  position: relative;
+  transition: background-color 200ms ease, padding-left 200ms ease;
+}
+
+/* Bar merah 3px muncul di kiri saat hover dan fokus keyboard */
+.contact-link::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--color-signal);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.contact-link:hover,
+.contact-link:focus-visible {
+  background-color: var(--color-panel);
+  padding-left: var(--spacing-24);
+}
+
+.contact-link:hover::before,
+.contact-link:focus-visible::before {
+  opacity: 1;
+}
+
+.contact-platform {
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: 500;
+  color: var(--color-text-strong);
+}
+
+.contact-handle {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+}
+
+.contact-arrow {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  color: var(--color-text);
+  transition: transform 200ms ease;
+}
+
+.contact-link:hover .contact-arrow,
+.contact-link:focus-visible .contact-arrow {
+  transform: translateX(6px);
+}
+
+/* Baris placeholder kontak redup */
+.contact-row-placeholder {
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   9. Footer Koordinat
+   -------------------------------------------------------------------------- */
+.site-footer {
+  background: transparent;
+  border-top: 1px solid var(--color-hairline);
+  padding-top: var(--spacing-32);
+  padding-bottom: var(--spacing-48);
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-16);
+  flex-wrap: wrap;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+}
+
+.footer-plus {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+}
+
+.footer-heart {
+  width: 14px;
+  height: 14px;
+  stroke: var(--color-text-muted);
+  fill: none;
+}
+
+/* --------------------------------------------------------------------------
+   10. Animasi Muncul Halus (Fade + Translate Y)
+   -------------------------------------------------------------------------- */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal-init {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11. Responsif & Media Queries
+   -------------------------------------------------------------------------- */
+
+/* Tablet & Desktop Kecil (< 1024px) */
+@media (max-width: 1023px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 0;
+  }
+
+  /* Garis rute penerbangan disembunyikan di bawah 1024px */
+  .project-card::before,
+  .project-card::after {
+    display: none;
+  }
+}
+
+/* Layar Menengah & Hero Stack (< 900px) */
+@media (max-width: 899px) {
+  .hero-left {
+    max-width: 100%;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-40);
+  }
+}
+
+/* Mobile & Navigasi Hamburger (< 768px) */
+@media (max-width: 767px) {
+  .nav-toggle-btn {
+    display: inline-flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-nav);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-hairline);
+    flex-direction: column;
+    padding: var(--spacing-24);
+    gap: var(--spacing-16);
+    align-items: flex-start;
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .contact-link {
+    grid-template-columns: 120px 1fr auto;
+    gap: var(--spacing-12);
+    padding: 24px var(--spacing-12);
+  }
+}
+
+/* Mobile Kecil (< 600px) */
+@media (max-width: 599px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-link {
+    grid-template-columns: 1fr auto;
+  }
+
+  .contact-handle {
+    display: none;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-12);
+  }
+
+  .profile-pass-ticket::before,
+  .profile-pass-ticket::after {
+    right: 71px;
+  }
+
+  .ticket-stub {
+    width: 80px;
+  }
+}
+
+/* Mobile Ekstra Kecil (375px & sekitarnya) */
+@media (max-width: 400px) {
+  .container {
+    padding-left: var(--spacing-16);
+    padding-right: var(--spacing-16);
+  }
+
+  .ticket-main {
+    padding: var(--spacing-20);
+  }
+
+  .btn-nav-contact {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary-signal,
+  .btn-ghost-pill {
+    width: 100%;
+    text-align: center;
+  }
+}

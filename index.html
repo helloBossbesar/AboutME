@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0F0F0F">
+  <meta name="color-scheme" content="dark">
+  <title>Muhammad Dzaki Al Siraj — Profil Pribadi</title>
+
+  <!-- TODO: Sesuaikan deskripsi meta untuk SEO -->
+  <meta name="description"
+    content="Profil pribadi Muhammad Dzaki Al Siraj, mahasiswa Universitas Bumigora. Menampilkan portofolio, keahlian, dan kontak.">
+
+  <!-- Open Graph Dasar -->
+  <meta property="og:title" content="Muhammad Dzaki Al Siraj — Profil Pribadi">
+  <meta property="og:description" content="Profil pribadi Muhammad Dzaki Al Siraj, mahasiswa Universitas Bumigora.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
+
+  <!-- Favicon SVG Inline Berwarna Signal Red -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23E10600'/%3E%3Cpath d='M10 22V10h5.5a4.5 4.5 0 0 1 0 9H13v3h-3zm3-6h2.2a1.8 1.8 0 1 0 0-3.6H13v3.6z' fill='%23FFFFFF'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts: Inter (300, 400, 500, 700), JetBrains Mono (400), Lora italic (400) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400&family=Lora:ital,wght@1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- Stylesheet: Token (:root) diikuti oleh Main Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Three.js r128 via vendor lokal (bebas tracking warning & offline-safe) -->
+  <script src="js/vendor/three.min.js"></script>
+
+  <!-- JavaScript Utama -->
+  <script src="js/main.js" defer></script>
+</head>
+
+<body>
+  <!-- Aksesibilitas: Tautan lewati ke konten utama -->
+  <a href="#main-content" class="skip-link">Lewati ke konten</a>
+
+  <!-- Layer 0 (z-index: 0): Canvas Scene 3D Global Three.js -->
+  <canvas id="bg-3d" aria-hidden="true"></canvas>
+
+  <!-- Fallback Statis 3D (z-index: 0) -->
+  <div id="bg-3d-fallback" class="bg-3d-fallback" aria-hidden="true">
+    <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="fallback-svg">
+      <polygon points="200,80 300,160 260,290 140,290 100,160" fill="#1A1A1A" stroke="#C0C0C0" stroke-width="1.2"
+        stroke-opacity="0.2" />
+      <polygon points="200,80 260,290 200,210" fill="#141414" stroke="#C0C0C0" stroke-width="1" stroke-opacity="0.15" />
+      <polygon points="200,80 140,290 200,210" fill="#202020" stroke="#C0C0C0" stroke-width="1" stroke-opacity="0.15" />
+    </svg>
+  </div>
+
+  <!-- Layer 1 (z-index: 1): Overlay Vignette Global -->
+  <div class="bg-vignette" aria-hidden="true"></div>
+
+  <!-- Layer 2 (z-index: 2): Tekstur Grain Halus (feTurbulence SVG) -->
+  <div class="bg-grain" aria-hidden="true"></div>
+
+  <!-- Layer 3 (z-index: 3): Strip Kode Hijau (Code Rail) di Kanan Viewport -->
+  <canvas id="code-rail" aria-hidden="true"></canvas>
+
+  <!-- Navigasi Frosted (z-index: 50) -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <!-- TODO: ganti wordmark jika mau -->
+      <a href="#hero" class="brand-wordmark" aria-label="Beranda Muhammad Dzaki Al Siraj">Obii</a>
+
+      <!-- Menu Navigasi Utama -->
+      <nav id="nav-menu" class="nav-links" aria-label="Navigasi Utama">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <!-- Tombol Aksi Kanan & Hamburger Mobile -->
+      <div style="display: flex; align-items: center; gap: var(--spacing-16);">
+        <a href="#contact" class="btn-nav-contact">Hubungi</a>
+
+        <button id="nav-toggle" class="nav-toggle-btn" aria-expanded="false" aria-controls="nav-menu"
+          aria-label="Buka menu navigasi">
+          <svg class="nav-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Konten Utama Halaman (z-index: 1) -->
+  <main id="main-content">
+    <!-- ====================================================================
+         SEKSI HERO (Transparan, Teks Rata Kiri ~55%, Latar 3D Terlihat Penuh)
+         ==================================================================== -->
+    <section id="hero" class="hero-section" aria-label="Pengenalan">
+      <div class="container hero-container">
+        <div class="hero-left">
+          <p class="hero-intro">Halo, <span class="hero-word-saya">saya</span></p>
+          <h1 class="hero-name">Muhammad Dzaki Al Siraj</h1>
+
+          <!-- TODO: SUB-TEKS HERO -->
+          <p class="hero-subtext">Sub-teks segera hadir.</p>
+
+          <div class="hero-actions">
+            <a href="#projects" class="btn-primary-signal">Lihat proyek</a>
+            <a href="#contact" class="btn-ghost-pill">Hubungi</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SEKSI ABOUT (Tiket Moonlit Silver & Panel Kaca Bio)
+         ==================================================================== -->
+    <section id="about" class="page-section" aria-labelledby="heading-about">
+      <div class="container">
+        <h2 id="heading-about" class="section-stamp">ABOUT</h2>
+
+        <div class="about-grid">
+          <!-- Kiri: Tiket Profile Pass Moonlit Silver -->
+          <aside class="profile-pass-ticket" aria-label="Tiket Profile Pass">
+            <div class="ticket-main">
+              <div class="ticket-header">
+                <span class="ticket-stamp">PROFILE PASS</span>
+                <span class="ticket-label">UB // 2026</span>
+              </div>
+
+              <div class="ticket-data-list">
+                <div class="ticket-row">
+                  <span class="ticket-label">NAMA</span>
+                  <span class="ticket-arrow" aria-hidden="true">→</span>
+                  <span class="ticket-val">Muhammad Dzaki Al Siraj</span>
+                </div>
+                <div class="ticket-row">
+                  <span class="ticket-label">KAMPUS</span>
+                  <span class="ticket-arrow" aria-hidden="true">→</span>
+                  <span class="ticket-val">Universitas Bumigora</span>
+                </div>
+                <div class="ticket-row">
+                  <span class="ticket-label">STATUS</span>
+                  <span class="ticket-arrow" aria-hidden="true">→</span>
+                  <span class="ticket-val">Mahasiswa</span>
+                </div>
+              </div>
+
+              <a href="https://instagram.com/jekkking" target="_blank" rel="noopener noreferrer"
+                class="btn-ticket-ig">Instagram →</a>
+            </div>
+
+            <!-- Stub Kanan Berlatar Merah dengan Barcode Charcoal -->
+            <div class="ticket-stub" aria-hidden="true">
+              <div class="ticket-barcode-vertical"></div>
+              <span class="ticket-stub-label">PASS</span>
+            </div>
+          </aside>
+
+          <!-- Kanan: Bio dibungkus Panel Kaca (Glassmorphism Halus) -->
+          <div class="about-bio-panel">
+            <!-- ===== TODO: BIO — isi 2–3 kalimat tentang kamu di sini ===== -->
+            <p class="bio-placeholder">Bio segera hadir.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SEKSI PROJECTS (Garis & Node pada Wrapper Statis, Hover pada Inner)
+         ==================================================================== -->
+    <section id="projects" class="page-section" aria-labelledby="heading-projects">
+      <div class="container">
+        <h2 id="heading-projects" class="section-stamp">PROJECTS</h2>
+
+        <!-- ===== TODO: PROYEK — salin satu <article class="project-card"> untuk menambah proyek (nama, deskripsi singkat, teknologi, link) ===== -->
+        <div class="projects-grid">
+          <!-- Kartu 01: Kartu Merah Sinyal (Satu-satunya kartu berwarna merah) -->
+          <article class="project-card">
+            <div class="project-card__inner project-card--bloom">
+              <div class="project-card-num" aria-hidden="true">01</div>
+              <div class="project-card-bottom">
+                <p class="project-card-label">PROYEK SEGERA HADIR</p>
+                <h3 class="project-card-title">Slot proyek</h3>
+              </div>
+            </div>
+          </article>
+
+          <!-- Kartu 02: Panel Charcoal -->
+          <article class="project-card">
+            <div class="project-card__inner project-card--panel">
+              <div class="project-card-num" aria-hidden="true">02</div>
+              <div class="project-card-bottom">
+                <p class="project-card-label">PROYEK SEGERA HADIR</p>
+                <h3 class="project-card-title">Slot proyek</h3>
+              </div>
+            </div>
+          </article>
+
+          <!-- Kartu 03: Panel Charcoal -->
+          <article class="project-card">
+            <div class="project-card__inner project-card--panel">
+              <div class="project-card-num" aria-hidden="true">03</div>
+              <div class="project-card-bottom">
+                <p class="project-card-label">PROYEK SEGERA HADIR</p>
+                <h3 class="project-card-title">Slot proyek</h3>
+              </div>
+            </div>
+          </article>
+
+          <!-- Kartu 04: Panel Charcoal -->
+          <article class="project-card">
+            <div class="project-card__inner project-card--panel">
+              <div class="project-card-num" aria-hidden="true">04</div>
+              <div class="project-card-bottom">
+                <p class="project-card-label">PROYEK SEGERA HADIR</p>
+                <h3 class="project-card-title">Slot proyek</h3>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SEKSI SKILLS
+         ==================================================================== -->
+    <section id="skills" class="page-section" aria-labelledby="heading-skills">
+      <div class="container">
+        <h2 id="heading-skills" class="section-stamp">SKILLS</h2>
+
+        <!-- ===== TODO: SKILL — tambah <li class="pill">Nama Skill</li> ===== -->
+        <ul class="skills-list">
+          <li class="pill">Segera hadir</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SEKSI CONTACT
+         ==================================================================== -->
+    <section id="contact" class="page-section" aria-labelledby="heading-contact">
+      <div class="container">
+        <h2 id="heading-contact" class="section-stamp">CONTACT</h2>
+
+        <!-- ===== TODO: KONTAK LAIN — salin satu baris <li class="contact-row"> untuk menambah email, GitHub, LinkedIn, dll ===== -->
+        <ul class="contact-list">
+          <!-- Baris 1: Instagram (Aktif) -->
+          <li class="contact-row">
+            <a href="https://instagram.com/jekkking" target="_blank" rel="noopener noreferrer" class="contact-link"
+              aria-label="Kunjungi profil Instagram Muhammad Dzaki Al Siraj di @jekkking">
+              <span class="contact-platform">Instagram</span>
+              <span class="contact-handle">@jekkking</span>
+              <span class="contact-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+
+          <!-- Baris 2: Email (Placeholder) -->
+          <!-- TODO: KONTAK LAIN — ganti dengan email kamu -->
+          <li class="contact-row contact-row-placeholder">
+            <a href="#contact" class="contact-link" aria-label="Kontak Email segera hadir">
+              <span class="contact-platform">Email</span>
+              <span class="contact-handle">Segera hadir</span>
+              <span class="contact-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+
+          <!-- Baris 3: GitHub (Placeholder) -->
+          <!-- TODO: KONTAK LAIN — ganti dengan akun GitHub kamu -->
+          <li class="contact-row contact-row-placeholder">
+            <a href="#contact" class="contact-link" aria-label="Akun GitHub segera hadir">
+              <span class="contact-platform">GitHub</span>
+              <span class="contact-handle">Segera hadir</span>
+              <span class="contact-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       FOOTER KOORDINAT
+       ==================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <!-- Sisi Kiri: Ikon plus dan nama -->
+      <div class="footer-left">
+        <span class="footer-plus" aria-hidden="true">+</span>
+        <span class="footer-name">Muhammad Dzaki Al Siraj</span>
+      </div>
+
+      <!-- Sisi Kanan: Koordinat statis dan ikon hati SVG -->
+      <!-- ===== TODO: KOTA / KOORDINAT — isi nanti ===== -->
+      <div class="footer-right">
+        <span class="footer-location">LAT — / LNG —</span>
+        <svg class="footer-heart" viewBox="0 0 24 24" aria-label="Dibuat dengan sepenuh hati" role="img"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
+          </path>
+        </svg>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
