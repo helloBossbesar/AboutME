@@ -524,22 +524,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ========================================================================
-  // 5. TANDAI LINK NAV AKTIF SESUAI SEKSI (IntersectionObserver)
+  // 5. TANDAI LINK NAV AKTIF SESUAI SEKSI & DASAR HALAMAN
   // ========================================================================
   const observedSections = document.querySelectorAll('section[id]');
+  let lastActiveId = 'hero';
+
+  const setActiveNavLink = (targetHash) => {
+    navLinks.forEach((link) => {
+      if (link.getAttribute('href') === targetHash) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  };
+
+  const checkScrollNav = () => {
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    const innerHeight = window.innerHeight;
+    const scrollHeight = document.documentElement.scrollHeight;
+
+    // Jika sudah di dasar halaman, aktifkan link Contact (footer)
+    if (scrollY + innerHeight >= scrollHeight - 2) {
+      setActiveNavLink('#contact');
+    } else if (lastActiveId) {
+      setActiveNavLink(`#${lastActiveId}`);
+    }
+  };
+
   if (observedSections.length > 0 && 'IntersectionObserver' in window) {
     const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const currentId = entry.target.getAttribute('id');
-            navLinks.forEach((link) => {
-              if (link.getAttribute('href') === `#${currentId}`) {
-                link.classList.add('active');
-              } else {
-                link.classList.remove('active');
-              }
-            });
+            lastActiveId = entry.target.getAttribute('id');
+            const scrollY = window.scrollY || window.pageYOffset || 0;
+            const innerHeight = window.innerHeight;
+            const scrollHeight = document.documentElement.scrollHeight;
+            if (scrollY + innerHeight < scrollHeight - 2) {
+              setActiveNavLink(`#${lastActiveId}`);
+            }
           }
         });
       },
@@ -552,6 +576,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     observedSections.forEach((sec) => sectionObserver.observe(sec));
   }
+
+  // Listener scroll pasif untuk deteksi instan saat mencapai dasar halaman
+  window.addEventListener('scroll', checkScrollNav, { passive: true });
+  checkScrollNav();
 
   // ========================================================================
   // 6. ANIMASI MUNCUL HALUS (FADE + TRANSLATE Y)

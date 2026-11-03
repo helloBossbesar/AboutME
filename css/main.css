@@ -794,133 +794,63 @@ main,
 }
 
 /* --------------------------------------------------------------------------
-   8. Seksi CONTACT
-   -------------------------------------------------------------------------- */
-.contact-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  border-top: 1px solid var(--color-hairline);
-}
-
-.contact-row {
-  border-bottom: 1px solid var(--color-hairline);
-  position: relative;
-}
-
-.contact-link {
-  display: grid;
-  grid-template-columns: 200px 1fr auto;
-  align-items: center;
-  gap: var(--spacing-24);
-  padding: 28px var(--spacing-16);
-  text-decoration: none;
-  color: var(--color-text);
-  position: relative;
-  transition: background-color 200ms ease, padding-left 200ms ease;
-}
-
-/* Bar merah 3px muncul di kiri saat hover dan fokus keyboard */
-.contact-link::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: var(--color-signal);
-  opacity: 0;
-  transition: opacity 200ms ease;
-}
-
-.contact-link:hover,
-.contact-link:focus-visible {
-  background-color: var(--color-panel);
-  padding-left: var(--spacing-24);
-}
-
-.contact-link:hover::before,
-.contact-link:focus-visible::before {
-  opacity: 1;
-}
-
-.contact-platform {
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: 500;
-  color: var(--color-text-strong);
-}
-
-.contact-handle {
-  font-family: var(--font-mono);
-  font-size: var(--text-body-sm);
-  color: var(--color-text-muted);
-}
-
-.contact-arrow {
-  font-family: var(--font-sans);
-  font-size: 20px;
-  color: var(--color-text);
-  transition: transform 200ms ease;
-}
-
-.contact-link:hover .contact-arrow,
-.contact-link:focus-visible .contact-arrow {
-  transform: translateX(6px);
-}
-
-/* Baris placeholder kontak redup */
-.contact-row-placeholder {
-  opacity: 0.7;
-}
-
-/* --------------------------------------------------------------------------
-   9. Footer Koordinat
+   8. Footer Kontak (Ikon Media Sosial)
    -------------------------------------------------------------------------- */
 .site-footer {
   background: transparent;
   border-top: 1px solid var(--color-hairline);
-  padding-top: var(--spacing-32);
-  padding-bottom: var(--spacing-48);
+  padding-block: 44px;
+  scroll-margin-top: 88px;
+  margin: 0;
 }
 
-.footer-content {
+.social-links {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--spacing-16);
-  flex-wrap: wrap;
 }
 
-.footer-left {
-  display: flex;
+.social-link {
+  display: inline-flex;
   align-items: center;
-  gap: var(--spacing-8);
-  font-family: var(--font-sans);
-  font-size: var(--text-body-sm);
-  color: var(--color-text-muted);
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline);
+  background-color: var(--color-glass);
+  color: var(--color-text);
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: color 200ms ease, border-color 200ms ease, transform 200ms ease, background-color 200ms ease;
 }
 
-.footer-plus {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--color-text-muted);
+.social-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  display: block;
 }
 
-.footer-right {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-8);
-  font-family: var(--font-mono);
-  font-size: var(--text-body-sm);
-  color: var(--color-text-muted);
+.social-link:hover {
+  color: var(--color-signal);
+  border-color: var(--color-signal);
+  transform: translateY(-2px);
 }
 
-.footer-heart {
-  width: 14px;
-  height: 14px;
-  stroke: var(--color-text-muted);
-  fill: none;
+.social-link:focus-visible {
+  color: var(--color-signal);
+  border-color: var(--color-signal);
+  transform: translateY(-2px);
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+.social-link[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
 }
 
 /* --------------------------------------------------------------------------
@@ -1014,32 +944,12 @@ main,
     font-size: 14px;
     width: 100%;
   }
-
-  .contact-link {
-    grid-template-columns: 120px 1fr auto;
-    gap: var(--spacing-12);
-    padding: 24px var(--spacing-12);
-  }
 }
 
 /* Mobile Kecil (< 600px) */
 @media (max-width: 599px) {
   .projects-grid {
     grid-template-columns: 1fr;
-  }
-
-  .contact-link {
-    grid-template-columns: 1fr auto;
-  }
-
-  .contact-handle {
-    display: none;
-  }
-
-  .footer-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-12);
   }
 
   .profile-pass-ticket::before,
