@@ -30,17 +30,29 @@
     rel="stylesheet">
 
   <!-- Stylesheet: Token (:root) diikuti oleh Main Stylesheet -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/main.css?v=5">
+  <link rel="stylesheet" href="css/earth-mode.css?v=6">
+  <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css?v=5">
 
   <!-- Three.js r128 via vendor lokal (bebas tracking warning & offline-safe) -->
-  <script src="js/vendor/three.min.js"></script>
+  <script src="js/vendor/three.min.js?v=5"></script>
+
+  <!-- Dependensi persisten untuk Mode Bumi, termasuk saat router memuat halaman Cerita -->
+  <script src="js/locations.js?v=5"></script>
+  <script src="js/vendor/leaflet/leaflet.js?v=5"></script>
+  <script src="js/space/quality.js?v=5"></script>
+  <script src="js/space/stars.js?v=5"></script>
+  <script src="js/space/earth.js?v=5"></script>
+  <script src="js/space/director.js?v=17"></script>
+  <script src="js/space/map-layer.js?v=7"></script>
 
   <!-- JavaScript Utama -->
-  <script src="js/main.js" defer></script>
+  <script src="js/main.js?v=10" defer></script>
 </head>
 
-<body>
+<body data-view="home">
+  <div id="route-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
   <!-- Aksesibilitas: Tautan lewati ke konten utama -->
   <a href="#main-content" class="skip-link">Lewati ke konten</a>
 
@@ -112,7 +124,6 @@
 
           <div class="hero-actions">
             <a href="#projects" class="btn-primary-signal">Lihat proyek</a>
-            <a href="#contact" class="btn-ghost-pill">Hubungi</a>
           </div>
         </div>
       </div>
@@ -131,7 +142,8 @@
             <div class="ticket-main">
               <div class="ticket-header">
                 <span class="ticket-stamp">PROFILE PASS</span>
-                <span class="ticket-label">UB // 2026</span>
+                <!-- TODO: konfirmasi singkatan kampus -->
+                <span class="ticket-label">UBG</span>
               </div>
 
               <div class="ticket-data-list">
@@ -152,8 +164,7 @@
                 </div>
               </div>
 
-              <a href="https://instagram.com/jekkking" target="_blank" rel="noopener noreferrer"
-                class="btn-ticket-ig">Instagram →</a>
+              <a href="tentang.html" class="btn-ticket-ig">Cerita lengkap →</a>
             </div>
 
             <!-- Stub Kanan Berlatar Merah dengan Barcode Charcoal -->
@@ -186,8 +197,8 @@
             <div class="project-card__inner project-card--bloom">
               <div class="project-card-num" aria-hidden="true">01</div>
               <div class="project-card-bottom">
-                <p class="project-card-label">PROYEK SEGERA HADIR</p>
-                <h3 class="project-card-title">Slot proyek</h3>
+                <p class="project-card-label">SistemManagemntPegawai</p>
+                <h3 class="project-card-title">SIMPEG</h3>
               </div>
             </div>
           </article>
@@ -282,6 +293,34 @@
       </div>
     </div>
   </footer>
+
+  <!-- HUD dan peta tetap hidup saat router mengganti konten <main>. -->
+  <div id="earth-map" hidden aria-hidden="true"></div>
+  <div id="earth-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <button id="btn-skip-anim" hidden aria-label="Lewati animasi">Lewati →</button>
+  <div id="earth-hud" role="dialog" aria-modal="true" hidden
+       aria-label="Lokasi di bumi" aria-live="polite">
+    <div class="hud-info" aria-live="polite">
+      <span class="hud-info-stage"></span>
+      <strong class="hud-info-title"></strong>
+      <span class="hud-info-place"></span>
+    </div>
+    <div class="hud-nav">
+      <button id="btn-earth-prev" class="hud-btn" aria-label="Lokasi sebelumnya">←</button>
+      <button id="btn-earth-next" class="hud-btn" aria-label="Lokasi berikutnya">→</button>
+      <button id="btn-earth-exit" class="hud-btn hud-btn--exit" aria-label="Tutup Mode Bumi">✕ Tutup</button>
+    </div>
+    <button id="btn-earth-credits" class="hud-credits-btn" aria-expanded="false"
+      aria-controls="earth-credits-popover">© Kredit</button>
+    <div id="earth-credits-popover" hidden role="note">
+      <strong>Kredit Aset</strong><br>
+      Tekstur bumi: NASA Blue Marble &amp; Black Marble (public domain)<br>
+      Peta satelit: Esri World Imagery<br>
+      Peta fallback: CARTO Dark Matter<br>
+      Leaflet.js © Volodymyr Agafonkin (BSD 2-Clause)<br>
+    </div>
+  </div>
+
 </body>
 
 </html>
